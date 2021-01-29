@@ -1,7 +1,7 @@
 /*! jQuery v3.5.1 | (c) JS Foundation and other contributors | jquery.org/license */
 
 /**
- * Trumbowyg v2.21.0 - A lightweight WYSIWYG editor
+ * Trumbowyg v2.23.0 - A lightweight WYSIWYG editor
  * Trumbowyg core file
  * ------------------------
  * @link http://alex-d.github.io/Trumbowyg

@@ -28,8 +28,8 @@ $factory->define(User::class, function (Faker $faker) {
     $name = $faker->name($gender);
     $username = str_replace(" ", ".", strtolower($name));
     $created_at = CalHelper::randomDate(
+        Carbon::now()->subYear(1)->toDateTimeString(),
         Carbon::now()->startOfYear()->toDateTimeString(),
-        Carbon::yesterday()->toDateTimeString()
     );
 
     return [

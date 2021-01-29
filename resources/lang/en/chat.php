@@ -5,9 +5,11 @@ return array(
     'chats' => 'Chats',
     'chat_room' => 'Chat Room',
     'chat_group' => 'Chat Group',
+    'is_public_group' => 'Is Open Chat Group',
     'chat_group_name' => 'Name of Chat Group',
     'message' => 'Message',
     'messages' => 'Messages',
+    'add' => 'Add',
     'member' => 'Member',
     'members' => 'Members',
     'props' => array(

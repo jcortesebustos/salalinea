@@ -30,6 +30,7 @@
                 }
             </style>
         @endif
+        <link href="/css/custom.css" rel="stylesheet">
     </head>
     <body>
         <noscript>
@@ -60,7 +61,7 @@
         @endif
 
         <script src="/js/env"></script>
-        <script src="/js/lang"></script>
+        <script src="/js/lang?locale={{ request()->get('locale') ?? '' }}"></script>
         <script src="{{ mix('js/app.js') }}"></script>
 
         @if(config('config.system.enable_aths_alert'))

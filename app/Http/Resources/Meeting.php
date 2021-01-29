@@ -27,9 +27,8 @@ class Meeting extends JsonResource
         $status = $this->getMeta('status');
         $config = $this->getMeta('config');
 
-        if (Carbon::parse($this->getMeta('estimated_end_time')) < now() && ! $this->getMeta('keep_alive') && $this->status != MeetingStatus::ENDED) {
-            $this->status = MeetingStatus::ENDED;
-            $this->save();
+        if ($this->getMeta('estimated_end_time') && Carbon::parse($this->getMeta('estimated_end_time')) < now() && ! $this->getMeta('keep_alive') && $status != MeetingStatus::ENDED) {
+            $status = MeetingStatus::ENDED;
         }
 
         $can_moderate = false;
@@ -69,8 +68,11 @@ class Meeting extends JsonResource
                'enable_hand_gesture'                  => $this->getConfig($config, 'enable_hand_gesture'),
                'footer_auto_hide'                     => $this->getConfig($config, 'footer_auto_hide'),
                'enable_file_sharing'                  => $this->getConfig($config, 'enable_file_sharing'),
+               'enable_link_sharing'                  => $this->getConfig($config, 'enable_link_sharing'),
                'disable_scroll'                       => $this->getConfig($config, 'disable_scroll'),
+            //    'speech_detection'                     => $this->getConfig($config, 'speech_detection'),
                'mute_participants_on_start'           => $this->getConfig($config, 'mute_participants_on_start'),
+               'allow_joining_without_devices'        => $this->getConfig($config, 'allow_joining_without_devices'),
                'layout'                               => $this->getConfig($config, 'layout', false),
            ),
            'delayed'                 => $this->getMeta('snooze_logs') ? true : false,

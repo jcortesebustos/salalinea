@@ -240,6 +240,7 @@ class ConfigRepository
         $app['auth']['social_login_providers'] = $this->getActiveSocialLoginProviders();
         $app['system']['post_max_size'] = SysHelper::getPostMaxSize();
         $app['system']['currency'] = ArrHelper::searchByKey($system_currencies, 'name', Arr::get($app, 'system.currency'));
+        $app['system']['locales'] = $this->locale->getLocales();
 
         return $app;
     }

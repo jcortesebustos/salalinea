@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Helpers\IpHelper;
+use App\Models\User;
+use App\Observers\UserObserver;
 use App\Traits\ModelRelation;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -29,7 +31,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        
+        User::observe(UserObserver::class);
+
         Activity::saving(function (Activity $activity) {
             $activity->properties = $activity->properties->put('ip', IpHelper::getClientIp());
             $activity->properties = $activity->properties->put('user_agent', \Request::header('User-Agent'));

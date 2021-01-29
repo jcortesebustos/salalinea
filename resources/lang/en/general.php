@@ -51,6 +51,7 @@
   'enabled' => 'Enabled',
   'enter_to_submit' => 'Enter to send',
   'enter_a_tag' => 'Enter a tag',
+  'form_has_errors' => 'Form has some errors, fix them before submitting the form!',
   'error_page' => 'Woah, hold on!!!',
   'error_page_heading' => 'Some strange things happened',
   'error_page_message' => 'Even we don\'t have any idea about it!',

@@ -44,6 +44,7 @@
   'details' => ':attribute Details',
   'download' => 'Download :attribute',
   'duplicate' => 'Duplicate :attribute',
+  'duplicate_found' => 'Duplicate :attribute found.',
   'edit' => 'Edit :attribute',
   'enter' => 'Enter :attribute',
   'file_not_supported' => ':attribute File not supported!',

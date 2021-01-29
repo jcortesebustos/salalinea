@@ -132,7 +132,7 @@ class RoleRepository
      */
     public function delete($uuid) : void
     {
-        $role = $this->findByUuidOrFail($uuid);
+        $role = $this->findByNameOrFail($uuid);
 
         if (in_array(strtolower($role->name), config('default.roles'))) {
             throw ValidationException::withMessages(['message' => __('global.cannot_delete_default', ['attribute' => __('config.role.role')])]);

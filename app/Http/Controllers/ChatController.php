@@ -78,6 +78,36 @@ class ChatController extends Controller
     }
 
     /**
+     * List chat room members
+     * @get ("/api/chat/rooms/{uuid}/members")
+     * @return array
+     */
+    public function listMember($uuid)
+    {
+        $chat_room = $this->repo->findRoomOrFail($uuid);
+
+        $this->repo->validateGroupChat($chat_room);
+
+        return $this->ok($this->repo->listMember($chat_room));
+    }
+
+    /**
+     * Sync public chat room members
+     * @get ("/api/chat/rooms/{uuid}/sync")
+     * @return array
+     */
+    public function syncMember($uuid)
+    {
+        $chat_room = $this->repo->findRoomOrFail($uuid);
+
+        $this->repo->validateGroupChat($chat_room);
+
+        $this->repo->syncMember($chat_room);
+
+        return $this->ok([]);
+    }
+
+    /**
      * Add member to chat room
      * @post ("/api/chat/rooms/{uuid}/member")
      * @return array

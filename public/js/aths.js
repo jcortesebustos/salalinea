@@ -28,6 +28,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
             // Wait for the user to respond to the prompt
             deferredPrompt.userChoice.then((choiceResult) => {
                 if (choiceResult.outcome === 'accepted') {
+                    window.localStorage.setItem('KMAthsAlertShown', JSON.stringify({ value: 1, timestamp: new Date().getTime() + 1440 * 60 * 1000 }))
                     console.log('User accepted the A2HS prompt')
                 } else {
                     window.localStorage.setItem('KMAthsAlertShown', JSON.stringify({ value: 1, timestamp: new Date().getTime() + 1440 * 60 * 1000 }))

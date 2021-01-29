@@ -271,4 +271,52 @@ class LocaleRepository
 
         $this->sortWords();
     }
+
+    /**
+     * Sync locale
+     *
+     * @param string $locale
+     */
+    public function sync($locale)
+    {
+        $this->findByLocale($locale);
+
+        $show_diff = request('diff', false);
+
+        $lang_diff = array();
+        foreach ($this->getModules() as $module) {
+            $words = \File::getRequire($this->validateModule('en', $module));
+            $locale_words = \File::getRequire($this->validateModule($locale, $module));
+            $diff = $this->getLocaleDifference($words, $locale_words);
+
+            if ($diff) {
+                if (! $show_diff) {
+                    $new = array_replace_recursive($diff, $locale_words);
+                    $this->writeToFile($locale, $module, $new);
+                } else {
+                    $lang_diff[$module.'.php'] = $diff;
+                }
+            }
+        }
+
+        return $show_diff ? $lang_diff : 'Locale synched.';
+    }
+
+    private function getLocaleDifference($array1, $array2) {
+        $difference=array();
+        foreach($array1 as $key => $value) {
+            if( is_array($value) ) {
+                if( !isset($array2[$key]) || !is_array($array2[$key]) ) {
+                    $difference[$key] = $value;
+                } else {
+                    $new_diff = $this->getLocaleDifference($value, $array2[$key]);
+                    if( !empty($new_diff) )
+                        $difference[$key] = $new_diff;
+                }
+            } else if( !array_key_exists($key,$array2) || $array2[$key] !== $value ) {
+                $difference[$key] = $value;
+            }
+        }
+        return $difference;
+    }
 }

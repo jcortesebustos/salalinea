@@ -254,14 +254,14 @@ class InviteeRepository
      */
     public function joinWithOtp($meeting_uuid) : void
     {
-        $meeting->ensureIsNotEnded();
-        
         $meeting = Meeting::whereUuid($meeting_uuid)->first();
 
         if (! $meeting) {
             return;
         }
 
+        $meeting->ensureIsNotEnded();
+        
         if ($meeting->getMeta('accessible_via_link')) {
             $this->addYourselfAsInvitee($meeting);
         }

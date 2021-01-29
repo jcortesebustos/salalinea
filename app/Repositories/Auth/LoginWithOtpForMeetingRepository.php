@@ -133,7 +133,7 @@ class LoginWithOtpForMeetingRepository
                 'email'   => request('email'),
                 'user_id' => $user->id
             ]);
-            $contact->users()->syncWithoutDetaching([\Auth::id()]);
+            $contact->users()->syncWithoutDetaching([$user->id]);
     
             if (request('device_name')) {
                 $token = $user->createToken(request('device_name'))->plainTextToken;

@@ -198,6 +198,7 @@ class InstallRepository
     {
         \Artisan::call('db:seed', ['--force' => true, '--class' => 'RoleSeeder']);
         \Artisan::call('db:seed', ['--force' => true, '--class' => 'PermissionSeeder']);
+        \Artisan::call('db:seed', ['--force' => true, '--class' => 'AssignPermissionSeeder']);
     }
 
     /**

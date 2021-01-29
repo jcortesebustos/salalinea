@@ -17,11 +17,14 @@
             'db_username' => 'Database Username',
             'first_name' => 'First Name',
             'last_name' => 'Last Name',
+            'name' => 'Name',
             'username' => 'Username',
             'email' => 'Email',
             'password' => 'Password',
             'password_confirmation' => 'Confirm Password',
-            'contact_number' => 'Contact Number'
+            'contact_number' => 'Contact Number',
+            'access_code' => 'Access Code',
+            'envato_email' => 'Envato Account Email'
         ),
         'completed' => 'Installation completed. You can now login.',
         'finish_button_content' => 'Finish',

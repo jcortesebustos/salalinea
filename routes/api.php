@@ -85,8 +85,9 @@ Route::group(['middleware' => ['auth:sanctum', '2fa', 'under_maintenance']], fun
         Route::post('assets', 'ConfigController@uploadAsset');
         Route::delete('assets', 'ConfigController@removeAsset');
 
-        Route::apiResource('roles', 'RoleController')->except(['update']);
-        
+        Route::delete('roles/{name}', 'RoleController@destroy');
+        Route::apiResource('roles', 'RoleController')->except(['update', 'destroy']);
+
         Route::get('permissions/pre-requisite', 'PermissionController@preRequisite');
         Route::post('permissions/assign', 'PermissionController@assign');
         
@@ -151,6 +152,8 @@ Route::group(['middleware' => ['auth:sanctum', '2fa', 'under_maintenance']], fun
         Route::get('rooms/{uuid}', 'ChatController@getRoom');
         Route::patch('rooms/{uuid}', 'ChatController@editRoom');
         Route::post('rooms', 'ChatController@createRoom')->name('chat.create-room');
+        Route::post('rooms/{uuid}/sync', 'ChatController@syncMember')->name('chat.sync-member')->middleware(['role:admin']);
+        Route::get('rooms/{uuid}/members', 'ChatController@listMember')->name('chat.list-member');
         Route::post('rooms/{uuid}/members', 'ChatController@addMember')->name('chat.add-member');
         Route::delete('rooms/{uuid}/members', 'ChatController@removeMember')->name('chat.remove-member');
         Route::get('messages', 'ChatController@getMessage');

@@ -11,6 +11,31 @@ Demo            : https://connect.kodemint.in
 
 To read installation guidelines, please visit http://support.kodemint.in
 
+Version 1.7.0 Released on 21 January 2021
+
+* Speech Detection Highlight feature added
+* Feature added to allow user to join meeting without camera / mic
+* Configurations added to hide/show Link Sharing Button
+* Configurations related to Manifest Start URL and Scope added
+* App Logo component linking made optional
+* Webinar and Live Class related minor fixes
+* Toast Notification CSS related fixes
+* Profile image upload issue fixed
+* Login with OTP issue fixed
+* Locales and Permissions syncing issue fixed
+* Add to home screen - loop issue fixed
+* Custom CSS file added and integrated to be used
+
+Version 1.6.1 Released on 8 December 2020
+
+* All User Chat Room feature with auto syncing
+* Separate Chat Window feature
+* Chat members and search api improved
+* Configurations added to hide File Sharing and Group Chat feature on Chat Box
+* Quick Locale Switcher component added
+* Form Has Error alert added for better clarity
+* Meeting not ending bug fix
+
 Version 1.6.0 Released on 23 November 2020
 
 * Group Chat Feature
@@ -22,8 +47,6 @@ Version 1.6.0 Released on 23 November 2020
 * Service Worker version updated
 * Live Class bug fix
 * Sidebar UI Config - Unsplash API bug fix
-
-* Custom Meeting Code and Keep Meeting Alive features added for Instant Meetings
 
 Version 1.5.0 Released on 29 October 2020
 

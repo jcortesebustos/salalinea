@@ -24,6 +24,13 @@ Route::get('/cache', function () {
     return 'Server cache is cleared!';
 });
 
+Route::get('locale/{locale}/sync', 'Config\LocaleController@sync');
+
+Route::get('permission/sync', function() {
+    \Artisan::call('sync:permission', ['--force' => true]);
+    return 'Permission synched.';
+});
+
 Route::get('/', function() {
     if (config('config.website.enabled')) {
         return view('site.index');
@@ -45,7 +52,7 @@ Route::get('/js/env', function () {
     if (App::environment('local')) {
         Cache::forget($cache_name);
     }
-    
+
     $strings = Cache::remember($cache_name, 43200, function () {
         $strings = [];
 
@@ -56,7 +63,7 @@ Route::get('/js/env', function () {
         if(env('APP_MODE') === 'test') {
             $strings['test_mode'] = true;
         }
-        
+
         $strings['gaid'] = env('GA_TRACKING_ID');
         $strings['version'] = SysHelper::getApp('VERSION');
 
@@ -68,14 +75,20 @@ Route::get('/js/env', function () {
 })->name('assets.env');
 
 // language route
-Route::get('/js/lang/{clear?}', function ($clear = false) {
+Route::get('/js/lang/{clear?}', function (Request $request, $clear = false) {
     $lang = config('config.system.locale') ?? 'en';
+
+    $request_lang = Request::input('locale');
+    if($request_lang) {
+        $lang = $request_lang;
+    }
+
     $cache_name = 'lang-'. $lang .'.js';
 
     if (App::environment('local') || $clear) {
         Cache::forget($cache_name);
     }
-    
+
     $strings = Cache::remember($cache_name, 86400, function () use ($lang) {
         $files = glob(resource_path('lang/' . $lang . '/*.php'));
         $strings = [];
@@ -181,7 +194,7 @@ Route::get('/site.webmanifest', function () {
             'name' => trans('meetings.start_a_meeting'),
             'url' => '/app/panel/instant-meetings/start'
         );
-        
+
         $shortcuts[] = array(
             'name' => trans('meetings.join_a_meeting'),
             'url' => '/app/panel/instant-meetings/join'
@@ -195,9 +208,11 @@ Route::get('/site.webmanifest', function () {
         $strings['shortcuts'] = $shortcuts;
         $strings['theme_color'] = config('config.basic.app_theme_color');
         $strings['background_color'] = config('config.basic.app_background_color');
-        // $strings['start_url'] = config('app.url').'/app/';
-        $strings['start_url'] = './app/';
-        $strings['scope'] = '/app';
+        $strings['start_url'] = config('config.basic.app_start_url');
+        $strings['scope'] = config('config.basic.app_scope');
+        // $strings['start_url'] = config('app.url').'/app';
+        // $strings['start_url'] = '.';
+        // $strings['scope'] = '/app';
         $strings['display'] = 'standalone';
         $strings['orientation'] = 'portrait';
         $strings['categories'] = ['utilities', 'business', 'education', 'productivity'];
@@ -214,7 +229,7 @@ Route::get('auth/login/{provider}', 'Auth\SocialLoginController@redirectToProvid
 Route::get('auth/login/{provider}/callback', 'Auth\SocialLoginController@handleProviderCallback');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/meetings/{meeting}/downloads/{media}', 'MeetingMediaController@download');
+
 });
 
 Route::get('/m/{identifier}', 'InviteeController@goToMeeting');

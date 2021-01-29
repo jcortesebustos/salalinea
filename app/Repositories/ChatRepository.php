@@ -14,6 +14,7 @@ use Illuminate\Validation\ValidationException;
 use App\Http\Resources\Chat as ChatResource;
 use App\Http\Resources\ChatRoom as ChatRoomResource;
 use App\Http\Resources\ChatRoomCollection;
+use App\Http\Resources\ChatRoomMemberCollection;
 use App\Http\Resources\UserSummaryCollection;
 use App\Models\ChatRoomMember;
 use App\Traits\CustomMedia;
@@ -148,7 +149,14 @@ class ChatRepository
     {
         $members = Arr::pluck(request('members'), 'uuid');
 
-        $users = $this->user->whereIn('uuid', $members)->where('id', '!=', \Auth::id())->whereStatus(UserStatus::ACTIVATED)->get();
+        $query = $this->user->where('id', '!=', \Auth::id())->whereStatus(UserStatus::ACTIVATED);
+
+        if (\Auth::user()->hasRole('admin') && request('is_public_group')) {} 
+        else {
+            $query->whereIn('uuid', $members);
+        }
+
+        $users = $query->get();
 
         // if (! $users->count()) {
         //     throw ValidationException::withMessages(['message' => trans('global.could_not_find', ['attribute' => trans('user.user')])]);
@@ -157,7 +165,9 @@ class ChatRepository
         $chat_room = $this->chat_room->forceCreate([
             'name' => request('name'),
             'last_conversation_at' => now(),
-            'meta' => []
+            'meta' => [
+                'is_public_group' => (\Auth::user()->hasRole('admin') && request('is_public_group')) ? true : false
+            ]
         ]);
 
         $chat_room->chatRoomMembers()->create([
@@ -211,6 +221,44 @@ class ChatRepository
         ]);
 
         return new ChatRoomResource($chat_room);
+    }
+
+    /**
+     * Sync members to public chat room
+     *
+     * @param ChatRoom $chat_room
+     */
+    public function syncMember(ChatRoom $chat_room)
+    {
+        $user_ids = $chat_room->chatRoomMembers->pluck('user_id')->all();
+
+        $users = $this->user->whereNotIn('id', $user_ids)->whereStatus(UserStatus::ACTIVATED)->get();
+
+        $users->each(function ($user) use ($chat_room) {
+            $chat_room->chatRoomMembers()->create([
+                'user_id' => $user->id,
+                'joined_at' => now()
+            ]);
+        });
+    }
+
+    /**
+     * List members of chat room
+     *
+     * @param ChatRoom $chat_room
+     */
+    public function listMember(ChatRoom $chat_room)
+    {
+        $q = request('q');
+        $per_page = request('per_page', config('config.system.per_page'));
+
+        $users = $this->chat_room_member->with('user')->whereChatRoomId($chat_room->id)->when($q, function($query, $q) {
+            $query->whereHas('user', function($query1) use ($q) {
+                $query1->where('name', 'like', '%'.$q.'%')->orWhere('email', 'like', '%'.$q.'%');
+            });
+        })->select('chat_room_members.*', \DB::raw('(SELECT name FROM users WHERE users.id = chat_room_members.user_id) as sort_by'))->orderBy('sort_by', 'asc')->get();
+
+        return new ChatRoomMemberCollection($users);
     }
 
     /**

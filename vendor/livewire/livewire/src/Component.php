@@ -48,13 +48,17 @@ abstract class Component
             ->mount($componentParams)
             ->renderToView();
 
+        if ($this->redirectTo) {
+            return redirect()->response($this->redirectTo);
+        }
+
         $layoutType = $this->initialLayoutConfiguration['type'] ?? 'component';
 
         return app('view')->file(__DIR__."/Macros/livewire-view-{$layoutType}.blade.php", [
-            'view' => $this->initialLayoutConfiguration['view'] ?? 'layouts.app',
+            'view' => $this->initialLayoutConfiguration['view'] ?? config('livewire.layout', 'layouts.app'),
             'params' => $this->initialLayoutConfiguration['params'] ?? [],
             'slotOrSection' => $this->initialLayoutConfiguration['slotOrSection'] ?? [
-                'extends' => 'content', 'component' => 'default',
+                'extends' => 'content', 'component' => 'slot',
             ][$layoutType],
             'manager' => $manager,
         ]);
@@ -106,6 +110,8 @@ abstract class Component
 
     public function renderToView()
     {
+        if ($this->shouldSkipRender) return null;
+
         Livewire::dispatch('component.rendering', $this);
 
         $view = method_exists($this, 'render')
@@ -159,7 +165,7 @@ abstract class Component
         $view->with([
             'errors' => $errors,
             '_instance' => $this,
-        ] + $this->getPublicPropertiesDefinedBySubClass());
+        ] + $this->getPublicPropertiesDefinedBySubClass() + $this->mapPublicMethodsToClosures());
 
         app('view')->share('errors', $errors);
         app('view')->share('_instance', $this);
@@ -174,6 +180,18 @@ abstract class Component
         $engine->endLivewireRendering();
 
         return $output;
+    }
+
+    public function mapPublicMethodsToClosures()
+    {
+        return collect((new \ReflectionClass($this))->getMethods(\ReflectionMethod::IS_PUBLIC))
+            ->reject(function($method) {
+                return $method->getDeclaringClass() === self::class || Str::startsWith($method->getName(), '__');
+            })
+            ->mapWithKeys(function($method) {
+                return [$method->getName() => $method->getClosure($this)];
+            })
+            ->all();
     }
 
     public function normalizePublicPropertiesForJavaScript()

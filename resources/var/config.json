@@ -22,10 +22,12 @@
 			"app_name": "Connect",
 			"app_desc": "Real-Time Communication App",
 			"app_theme_color": "#581b98",
-			"app_background_color": "#ffffff"
+			"app_background_color": "#ffffff",
+			"app_start_url": ".",
+			"app_scope": "/app"
 		},
 	    "auth": {
-		    "session_lifetime": 1440,
+		    "session_lifetime": 10080,
 		    "login_throttle": false,
 			"lock_screen": true,
 			"lock_screen_timeout": 60,
@@ -75,10 +77,12 @@
 			"enable_auto_open": true,
 			"enter_to_submit": false,
 			"mute_sound_notification": false,
-			"separate_window": false
+			"file_sharing": true,
+			"group_chat": true,
+			"separate_window": true
 		},
 		"signal": {
-			"url": null 
+			"url": null
 		},
 		"ice": {
 			"servers": []
@@ -91,14 +95,17 @@
 			"enable_recording": true,
 			"enable_hand_gesture": true,
 			"enable_file_sharing": true,
+			"enable_link_sharing": true,
 			"footer_auto_hide": false,
 			"disable_scroll": false,
+			"speech_detection": true,
 			"mute_participants_on_start": false,
 			"layout": "fullpage",
 			"recording_format_audio": "audio/webm",
 			"recording_format_video": "video/webm",
 			"allow_deleting_cancelled_meetings": false,
 			"allow_deleting_ended_meetings": false,
+			"allow_joining_without_devices": false,
 			"instant_meeting_auto_ended": 180
 		}
 	},
@@ -113,8 +120,8 @@
 		    "currency",
 		    "footer_credit",
 		    "setup_wizard",
-			"print_preview",		
-			"enable_aths_alert"		
+			"print_preview",
+			"enable_aths_alert"
 		],
 		"basic": [
 			"org_name",
@@ -224,6 +231,8 @@
 	        "enable_auto_open",
 			"enter_to_submit",
 			"mute_sound_notification",
+			"file_sharing",
+			"group_chat",
 			"separate_window"
 		],
 		"website": [
@@ -237,9 +246,12 @@
 	        "enable_recording",
 	        "enable_hand_gesture",
 	        "enable_file_sharing",
+	        "enable_link_sharing",
 	        "footer_auto_hide",
 	        "disable_scroll",
+	        "speech_detection",
 	        "mute_participants_on_start",
+	        "allow_joining_without_devices",
 	        "allow_deleting_cancelled_meetings",
 	        "allow_deleting_ended_meetings"
 		]

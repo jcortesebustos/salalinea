@@ -57,6 +57,13 @@ return [
                  * Determines if symlinks should be followed.
                  */
                 'follow_links' => false,
+
+                /*
+                 * This path is used to make directories in resulting zip-file relative
+                 * Set to false to include complete absolute path
+                 * Example: base_path()
+                 */
+                'relative_path' => false,
             ],
 
             /*
@@ -130,7 +137,7 @@ return [
 
     /*
      * You can get notified when specific events occur. Out of the box you can use 'mail' and 'slack'.
-     * For Slack you need to install guzzlehttp/guzzle.
+     * For Slack you need to install laravel/slack-notification-channel.
      *
      * You can also use your own notification classes, just make sure the class is named after one of
      * the `Spatie\Backup\Events` classes.
@@ -313,6 +320,21 @@ Here's an example for MySQL:
 		]
 	],
 ```
+
+### File extensions of database dumps
+
+By default, database dump files are named `.sql`, except for the MongoDB driver which are named `.archive`. If you would like to override this, you can set the file extension to be used in the config.
+
+For example, to save a database dump as a `.txt` file:
+```php
+//config/backup.php
+'backup' => [
+    ...,
+    'database_dump_file_extension' => 'txt',
+  ],
+```
+
+> This relates to the names of the database dump files **within** the overall backup `zip` file that is generated.
 
 ### Custom database dumpers
 

@@ -20,6 +20,8 @@ class ChatRoomMember extends JsonResource
         return [
             // 'chat_room' => new ChatRoom($this->whenLoaded('chatRoom')),
             'user'         => new UserSummary($this->whenLoaded('user')),
+            'username'     => optional($this->user)->username,
+            'name'         => optional($this->user)->name,
             'joined_at'    => CalHelper::toDateTime($this->joined_at),
             'left_at'      => CalHelper::toDateTime($this->left_at),
             'is_owner'     => $this->is_owner ? true : false,

@@ -119,4 +119,17 @@ class LocaleController extends Controller
 
         return $this->success(['message' => __('global.updated', ['attribute' => __('config.locale.translation')])]);
     }
+
+    /**
+     * Sync locale words with english locale
+     * @post ("/locale/{locale}/sync")
+     * @param ({
+     *      @Parameter("locale", type="string", required="true", description="Locale"),
+     * })
+     * @return array
+     */
+    public function sync($locale)
+    {
+        return $this->repo->sync($locale);
+    }
 }

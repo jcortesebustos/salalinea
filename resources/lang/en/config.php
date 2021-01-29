@@ -79,7 +79,9 @@
     'enable_auto_open' => 'Auto Open',
     'enter_to_submit' => 'Enter to Submit',
     'mute_sound_notification' => 'Mute Sound Notification',
-    'separate_window' => 'Separate Window',
+    'file_sharing' => 'File Sharing',
+    'group_chat' => 'Group Chat',
+    'separate_window' => 'Can be maximized',
   ),
   'signal' =>
   array(
@@ -113,6 +115,8 @@
     'app_desc' => 'Description',
     'app_theme_color' => 'Theme Color',
     'app_background_color' => 'Background Color',
+    'app_start_url' => 'PWA Start URL',
+    'app_scope' => 'PWA Scope',
   ),
   'config' => 'Config',
   'configuration' => 'Configuration',
@@ -127,7 +131,8 @@
     array (
       'name' => 'Name',
       'word' => 'Word',
-      'is_default' => 'Is Default?',
+      'is_default' => 'Is Predefined?',
+      'default' => 'Predefined',
     ),
     'module_description' => 'Translate your application to any locale, add new word for translation, update translation & switch to your own locale',
     'translation' => 'Translation',
@@ -204,7 +209,8 @@
     'props' =>
     array (
       'name' => 'Name',
-      'is_default' => 'Is Default?',
+      'is_default' => 'Is Predefined?',
+      'default' => 'Predefined',
     ),
     'module_title' => 'Listing all Roles',
     'module_description' => 'Create multiple roles for your users, assign different permission based on the roles.',

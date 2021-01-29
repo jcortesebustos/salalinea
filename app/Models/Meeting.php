@@ -142,7 +142,7 @@ class Meeting extends Model implements HasMedia
         if (\Auth::user()->id === $this->user_id || \Auth::user()->hasRole('admin')) {
             return true;
         }
-        
+
         $invitee = $this->getInvitee();
 
         if ($invitee->getMeta('is_blocked')) {
@@ -202,7 +202,7 @@ class Meeting extends Model implements HasMedia
         if ($this->getMeta('status') != MeetingStatus::SCHEDULED) {
             return $this;
         }
-        
+
         $date = Carbon::parse($this->start_date_time);
 
         if ($date->isFuture()) {
@@ -252,7 +252,9 @@ class Meeting extends Model implements HasMedia
         $config['enable_hand_gesture']                  = request()->boolean('enable_hand_gesture');
         $config['footer_auto_hide']                     = request()->boolean('footer_auto_hide');
         $config['mute_participants_on_start']           = request()->boolean('mute_participants_on_start');
+        $config['allow_joining_without_devices']        = request()->boolean('allow_joining_without_devices');
         $config['enable_file_sharing']                  = request()->boolean('enable_file_sharing');
+        $config['enable_link_sharing']                  = request()->boolean('enable_link_sharing');
         $config['layout']                               = request('layout');
         $meta['config'] = $config;
         $this->meta = $meta;
@@ -281,9 +283,9 @@ class Meeting extends Model implements HasMedia
         if ($this->period) {
             $meta['estimated_end_time'] = CalHelper::storeDateTime(Carbon::parse($this->start_date_time)->addMinutes($this->period));
         }
-        
+
         $this->meta = $meta;
-        
+
         $this->save();
 
         broadcast(new MeetingStatusChanged($this))->toOthers();
