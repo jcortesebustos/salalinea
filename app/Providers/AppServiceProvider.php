@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
     {
         if(config('app.env')==='production')
         {
-            URL::forceScheme('https');
+            \URL::forceScheme('https');
         }
         Activity::saving(function (Activity $activity) {
             $activity->properties = $activity->properties->put('ip', IpHelper::getClientIp());
