@@ -29,6 +29,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if(config('app.env')==='production')
+        {
+            URL::forceScheme('https');
+        }
         Activity::saving(function (Activity $activity) {
             $activity->properties = $activity->properties->put('ip', IpHelper::getClientIp());
             $activity->properties = $activity->properties->put('user_agent', \Request::header('User-Agent'));
